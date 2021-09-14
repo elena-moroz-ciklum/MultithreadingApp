@@ -10,7 +10,7 @@ namespace MultithreadingApp
         public static readonly Guid TaxReport2019 = Guid.Parse("24d92ed1-bb15-471f-b539-0cffb4b57335");
         public static readonly Guid TaxReport2020 = Guid.Parse("19dfedc0-7ed7-4288-a4d3-248a93e04dc7");
 
-        public static readonly ConcurrentDictionary<Guid, TaxReport> TaxReports = new();
+        public static readonly ConcurrentDictionary<Guid, TaxReport> TaxReports = new(); // concurrencyLevel & capacity
 
         public static async Task Main(string[] args)
         {
@@ -28,6 +28,7 @@ namespace MultithreadingApp
 
         private static void GetOrAddTaxReport(Guid taxReportId)
         {
+            // GetOrAdd and AddOrUpdate are thread-safe but not atomic
             var report = TaxReports.GetOrAdd(taxReportId, GetTaxReportFromDataStore);
             Console.WriteLine(report.CreatedByThreadId);
         }
